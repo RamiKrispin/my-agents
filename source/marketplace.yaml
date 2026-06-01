@@ -1,0 +1,16 @@
+# Marketplace identity (source of truth).
+# Edit this file, then run `python3 scripts/build.py` to regenerate tool outputs.
+#
+# Format note: this is a FLAT key/value file (no nested maps or block lists),
+# so the zero-dependency parser in scripts/build.py can read it. Lists use the
+# inline form: keywords: [a, b, c]. Nested objects (like `owner`) are expressed
+# as flat keys (owner_name, owner_email, owner_url) and rebuilt by the generator.
+
+name: my-agents
+owner_name: RamiKrispin
+owner_email: ramkrisp@umich.edu
+owner_url: https://github.com/RamiKrispin
+
+# Optional marketplace metadata (emitted under marketplace.json -> metadata)
+description: Rami Krispin's personal marketplace of agents, commands, and skills.
+version: 0.1.0

@@ -1,0 +1,18 @@
+{
+  "name": "newsletter",
+  "version": "0.1.2",
+  "description": "Draft Rami Krispin's weekly data science newsletter from a set of links, in his voice.",
+  "author": {
+    "name": "Rami Krispin",
+    "url": "https://github.com/RamiKrispin"
+  },
+  "homepage": "https://github.com/RamiKrispin/my-agents",
+  "license": "MIT",
+  "keywords": [
+    "newsletter",
+    "substack",
+    "data-science",
+    "writing",
+    "content"
+  ]
+}

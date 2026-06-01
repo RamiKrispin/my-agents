@@ -1,0 +1,17 @@
+{
+  "name": "example-toolkit",
+  "version": "0.1.0",
+  "description": "A starter toolkit demonstrating a shared agent, command, and skill.",
+  "author": {
+    "name": "Rami Krispin",
+    "url": "https://github.com/RamiKrispin"
+  },
+  "homepage": "https://github.com/RamiKrispin/my-agents",
+  "license": "MIT",
+  "keywords": [
+    "example",
+    "template",
+    "code-review",
+    "changelog"
+  ]
+}

@@ -1,0 +1,12 @@
+# Plugin manifest (source of truth) — FLAT key/value format.
+# Per docs/adding-a-plugin.md. Run `python3 scripts/build.py` after editing.
+
+name: newsletter
+description: Draft Rami Krispin's weekly data science newsletter from a set of links, in his voice.
+version: 0.1.2
+author_name: Rami Krispin
+author_url: https://github.com/RamiKrispin
+homepage: https://github.com/RamiKrispin/my-agents
+license: MIT
+category: content
+keywords: [newsletter, substack, data-science, writing, content]

@@ -1,0 +1,53 @@
+{
+  "name": "my-agents",
+  "owner": {
+    "name": "RamiKrispin",
+    "email": "ramkrisp@umich.edu",
+    "url": "https://github.com/RamiKrispin"
+  },
+  "metadata": {
+    "description": "Rami Krispin's personal marketplace of agents, commands, and skills.",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "example-toolkit",
+      "source": "./plugins/example-toolkit",
+      "description": "A starter toolkit demonstrating a shared agent, command, and skill.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Rami Krispin",
+        "url": "https://github.com/RamiKrispin"
+      },
+      "homepage": "https://github.com/RamiKrispin/my-agents",
+      "license": "MIT",
+      "category": "productivity",
+      "keywords": [
+        "example",
+        "template",
+        "code-review",
+        "changelog"
+      ]
+    },
+    {
+      "name": "newsletter",
+      "source": "./plugins/newsletter",
+      "description": "Draft Rami Krispin's weekly data science newsletter from a set of links, in his voice.",
+      "version": "0.1.2",
+      "author": {
+        "name": "Rami Krispin",
+        "url": "https://github.com/RamiKrispin"
+      },
+      "homepage": "https://github.com/RamiKrispin/my-agents",
+      "license": "MIT",
+      "category": "content",
+      "keywords": [
+        "newsletter",
+        "substack",
+        "data-science",
+        "writing",
+        "content"
+      ]
+    }
+  ]
+}
