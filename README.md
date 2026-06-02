@@ -7,6 +7,17 @@ Today it targets **[Claude Code](https://docs.claude.com/en/docs/claude-code)**
 and **[opencode](https://opencode.ai)**. Adding another tool is one emitter
 function in the generator.
 
+## Available plugins
+
+| Plugin | Version | What's inside | Install (Claude Code) |
+| --- | --- | --- | --- |
+| **newsletter** | 0.1.2 | `newsletter-builder` skill + `/newsletter` command. Drafts a weekly data science newsletter — the fixed *Open Source of the Week* → *New Learning Resources* → *Book of the Week* sections — from a set of links, in the author's voice. Researches each link (GitHub metadata, JS-rendering reader for fetch-hostile pages like O'Reilly/YouTube, ISBN→book lookup), runs a QA pass, and saves a Substack-ready draft. | `/plugin install newsletter@my-agents` |
+| **example-toolkit** | 0.1.0 | `code-reviewer` agent, `/summarize-diff` command, and `changelog` skill — a minimal, working template to copy when starting a new plugin. | `/plugin install example-toolkit@my-agents` |
+
+First add the marketplace (`/plugin marketplace add RamiKrispin/my-agents`, or a
+local path — see [Connecting your tools](#connecting-your-tools)), then install.
+Keep this table in sync when you add or remove a plugin under `source/plugins/`.
+
 ## How it works
 
 You edit a single, tool-neutral copy of each agent/command/skill under

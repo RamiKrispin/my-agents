@@ -28,7 +28,8 @@ the marketplace entry.
 ```yaml
 name: your-plugin            # kebab-case, unique within the marketplace
 description: One line describing the plugin.
-version: 0.1.0
+version: 0.1.0               # bump this on EVERY change — Claude Code only
+                             # re-installs when the version changes
 author_name: Rami Krispin    # optional
 author_url: https://github.com/RamiKrispin   # optional (or author_email)
 homepage: https://github.com/RamiKrispin/my-agents   # optional
@@ -101,16 +102,34 @@ If a plugin folder contains `hooks/` or a `.mcp.json`, they are copied verbatim
 into the generated Claude Code plugin. These have no opencode equivalent here
 and are not converted.
 
-## 7. Regenerate and commit
+## 7. Regenerate, sync docs, and commit
 
-```bash
-python3 scripts/build.py
-git add source/ plugins/ .claude-plugin/ .opencode/ opencode.json
-git commit -m "Add <your-plugin>"
-```
+After any change to a plugin:
+
+1. **Bump the plugin `version`** in its `plugin.yaml` (even for small edits).
+   Claude Code only re-installs a plugin when the version changes.
+2. **Regenerate** the tool outputs:
+   ```bash
+   python3 scripts/build.py
+   ```
+3. **Update the README** — keep the *Available plugins* table in sync (add or
+   remove the row; update the version and description).
+4. **Verify** nothing is stale:
+   ```bash
+   python3 scripts/build.py --check
+   ```
+5. **Commit** source and generated files together:
+   ```bash
+   git add -A
+   git commit -m "Add/update <your-plugin>"
+   ```
 
 The generated files **must** be committed — Claude Code reads them from the repo
 when it adds the marketplace.
+
+To pull the update into a running Claude Code session:
+`/plugin marketplace update my-agents` then `/reload-skills` (or reinstall the
+plugin with `/plugin uninstall` + `/plugin install`).
 
 ## Source format constraints
 
