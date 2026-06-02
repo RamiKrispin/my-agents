@@ -12,12 +12,14 @@ python3 scripts/build.py
 ```
 source/plugins/<your-plugin>/
   plugin.yaml
+  README.md          # documents the plugin; shipped with it
   agents/
   commands/
   skills/
 ```
 
-You only need the subfolders you actually use.
+You only need the subfolders you actually use. A `README.md` at the plugin root
+is optional but recommended — the generator copies it into the built plugin.
 
 ## 2. Write `plugin.yaml`
 

@@ -11,8 +11,9 @@ function in the generator.
 
 | Plugin | Version | What's inside | Install (Claude Code) |
 | --- | --- | --- | --- |
-| **newsletter** | 0.1.2 | `newsletter-builder` skill + `/newsletter` command. Drafts a weekly data science newsletter — the fixed *Open Source of the Week* → *New Learning Resources* → *Book of the Week* sections — from a set of links, in the author's voice. Researches each link (GitHub metadata, JS-rendering reader for fetch-hostile pages like O'Reilly/YouTube, ISBN→book lookup), runs a QA pass, and saves a Substack-ready draft. | `/plugin install newsletter@my-agents` |
-| **example-toolkit** | 0.1.0 | `code-reviewer` agent, `/summarize-diff` command, and `changelog` skill — a minimal, working template to copy when starting a new plugin. | `/plugin install example-toolkit@my-agents` |
+| **course-builder** | 0.1.1 | `course-builder` skill (orchestrator) + `course-content-creator` and `course-qa` subagents + a ported, theme-aware `course-slide-deck` skill, driven by `/course`. Builds a **course** (chapters/lessons with scripts + per-lesson slides) or a **workshop** (agenda topics + one combined deck, no scripts) stage-by-stage from a `spec/` source of truth, with a continuity ledger, named style profiles (default `design-principles`), step-by-step or all-at-once builds, and an independent QA pass. See [its README](plugins/course-builder/README.md). | `/plugin install course-builder@my-agents` |
+| **newsletter** | 0.1.3 | `newsletter-builder` skill + `/newsletter` command. Drafts a weekly data science newsletter — the fixed *Open Source of the Week* → *New Learning Resources* → *Book of the Week* sections — from a set of links, in the author's voice. Researches each link (GitHub metadata, JS-rendering reader for fetch-hostile pages like O'Reilly/YouTube, ISBN→book lookup), runs a QA pass, and saves a Substack-ready draft. See [its README](plugins/newsletter/README.md). | `/plugin install newsletter@my-agents` |
+| **example-toolkit** | 0.1.1 | `code-reviewer` agent, `/summarize-diff` command, and `changelog` skill — a minimal, working template to copy when starting a new plugin. See [its README](plugins/example-toolkit/README.md). | `/plugin install example-toolkit@my-agents` |
 
 First add the marketplace (`/plugin marketplace add RamiKrispin/my-agents`, or a
 local path — see [Connecting your tools](#connecting-your-tools)), then install.
@@ -90,8 +91,10 @@ The `code-reviewer` agent and `summarize-diff` command then work in opencode.
 ## Adding your own content
 
 See [docs/adding-a-plugin.md](docs/adding-a-plugin.md). In short: create a folder
-under `source/plugins/`, add a `plugin.yaml` and your `agents/`, `commands/`,
-and/or `skills/`, then run `python3 scripts/build.py`.
+under `source/plugins/`, add a `plugin.yaml`, an optional `README.md`, and your
+`agents/`, `commands/`, and/or `skills/`, then run `python3 scripts/build.py`.
+Each plugin should carry its own `README.md` documenting it (it ships with the
+plugin).
 
 ## What gets remapped
 

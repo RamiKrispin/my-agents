@@ -3,7 +3,7 @@
 
 name: newsletter
 description: Draft Rami Krispin's weekly data science newsletter from a set of links, in his voice.
-version: 0.1.2
+version: 0.1.3
 author_name: Rami Krispin
 author_url: https://github.com/RamiKrispin
 homepage: https://github.com/RamiKrispin/my-agents

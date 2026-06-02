@@ -5,7 +5,7 @@
 
 name: example-toolkit
 description: A starter toolkit demonstrating a shared agent, command, and skill.
-version: 0.1.0
+version: 0.1.1
 author_name: Rami Krispin
 author_url: https://github.com/RamiKrispin
 homepage: https://github.com/RamiKrispin/my-agents

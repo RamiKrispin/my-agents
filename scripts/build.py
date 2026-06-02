@@ -245,6 +245,11 @@ def process_plugin(plugin_dir: Path) -> dict:
     _write(cc_root / ".claude-plugin" / "plugin.json",
            json.dumps(manifest, indent=2) + "\n")
 
+    # Plugin README (optional) -> shipped with the Claude Code plugin.
+    readme = plugin_dir / "README.md"
+    if readme.is_file():
+        shutil.copy2(readme, cc_root / "README.md")
+
     # Agents -> Claude Code + opencode.
     for agent_file in sorted((plugin_dir / "agents").glob("*.md")):
         fm, body = split_frontmatter(agent_file.read_text(encoding="utf-8"))

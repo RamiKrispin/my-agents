@@ -1,0 +1,12 @@
+# Plugin manifest (source of truth) — FLAT key/value format.
+# Per docs/adding-a-plugin.md. Bump version on every change; run scripts/build.py.
+
+name: course-builder
+description: Build courses or workshops stage-by-stage from a spec, in your voice, with continuity tracking and an independent QA pass.
+version: 0.1.1
+author_name: Rami Krispin
+author_url: https://github.com/RamiKrispin
+homepage: https://github.com/RamiKrispin/my-agents
+license: MIT
+category: content
+keywords: [course, workshop, education, slides, teaching, content]
