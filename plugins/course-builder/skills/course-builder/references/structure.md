@@ -1,10 +1,10 @@
 # Output structure
 
-The course-builder writes into the **target repo** (where the course/workshop
-lives), never into the marketplace. `spec/` holds the development docs; the rest
-is learner-facing.
+The course-builder writes into the **target repo** (where the course lives),
+never into the marketplace. `spec/` holds the development docs; the rest is
+learner-facing.
 
-## Course mode
+> Building a workshop? Use the sibling **workshop-builder** plugin instead.
 
 ```
 spec/                              development docs (source of truth)
@@ -28,24 +28,3 @@ script/                            narration scripts (separate tree)
   script_opening.md                course-level scripts (optional)
   script_closing.md
 ```
-
-## Workshop mode
-
-```
-spec/
-  workshop-spec.md
-  agenda.md
-  continuity.md
-  open-items.md
-  style/                           OPTIONAL per-repo profile override
-
-NN_topic_name/                     numbered by agenda order: 01_intro, 02_setup, …
-  README.md                        topic notes + steps
-  <supporting code / docs>         in the topic folder
-
-slides/
-  workshop_slides.html             ONE deck for the whole workshop (a section per topic)
-```
-
-Workshop differences: **no scripts**, folders are `NN_topic_name`, one combined
-slide deck for the entire workshop.

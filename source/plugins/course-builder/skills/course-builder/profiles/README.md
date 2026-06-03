@@ -4,6 +4,9 @@ A **profile** is a course's identity: writing **voice** + slide **style** +
 **examples**, coupled together. Pick one at the spec stage (default
 `design-principles`).
 
+> Building a workshop? Profiles for that mode live in the sibling
+> **workshop-builder** plugin under `skills/workshop-builder/profiles/`.
+
 ```
 <profile>/
   voice-guide.md     the writing voice + script/README structure

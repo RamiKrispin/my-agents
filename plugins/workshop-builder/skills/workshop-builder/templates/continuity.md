@@ -2,7 +2,8 @@
 
 > **Read this before building any topic.** Append after each topic is approved.
 > Keeps terminology and the running example consistent, and ensures each topic
-> picks up where the previous one left off (the single deck flows as one story).
+> picks up where the previous one left off (the deck flows as one story, even
+> when split per topic).
 
 ## Ledger — what each topic established
 

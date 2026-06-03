@@ -1,7 +1,7 @@
 {
   "name": "course-builder",
-  "version": "0.1.1",
-  "description": "Build courses or workshops stage-by-stage from a spec, in your voice, with continuity tracking and an independent QA pass.",
+  "version": "0.2.0",
+  "description": "Build a course stage-by-stage from a spec, in your voice, with continuity tracking and an independent QA pass.",
   "author": {
     "name": "Rami Krispin",
     "url": "https://github.com/RamiKrispin"
@@ -10,7 +10,6 @@
   "license": "MIT",
   "keywords": [
     "course",
-    "workshop",
     "education",
     "slides",
     "teaching",

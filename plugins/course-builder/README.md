@@ -1,8 +1,12 @@
 # course-builder
 
-Build a **course** or a **workshop** from idea to finished materials, stage by
-stage — with a `spec/` folder as the source of truth, continuity tracking across
-stages, named style **profiles**, and an independent QA pass.
+Build a **course** from idea to finished materials, stage by stage — with a
+`spec/` folder as the source of truth, continuity tracking across stages,
+named style **profiles**, and an independent QA pass.
+
+> Building a workshop instead? Use the sibling
+> [workshop-builder](../workshop-builder/README.md) plugin (single combined
+> deck by default, slides under `slides/`, no scripts, opt-in topic READMEs).
 
 Install: `/plugin install course-builder@my-agents` · Start: `/course`
 
@@ -11,32 +15,32 @@ Install: `/plugin install course-builder@my-agents` · Start: `/course`
 | Component | Type | Role |
 | --- | --- | --- |
 | `course-builder` | skill | **Orchestrator.** Runs discovery → writes the spec → builds stage-by-stage with your checkpoints. Holds the templates, profiles, and conventions. |
-| `course-content-creator` | subagent | Builds **one stage** (a chapter or a topic) from the approved spec — READMEs, scripts (course only), code/assets, and slides. |
+| `course-content-creator` | subagent | Builds **one stage** (a chapter) from the approved spec — READMEs, scripts, code/assets, and slides. |
 | `course-qa` | subagent | **Independent** reviewer of each stage: scope, technical accuracy, pedagogy, naming, terminology, voice, and cross-stage continuity. |
-| `course-slide-deck` | skill | Renders the HTML decks (ported, theme-aware; one deck per lesson, or one combined workshop deck). |
+| `course-slide-deck` | skill | Renders the HTML decks (ported, theme-aware; one deck per lesson). |
 | `/course` | command | Entry point to start or continue a build. |
 
-## Two modes (chosen during discovery)
+## What this plugin produces
 
-| | **Course** | **Workshop** |
-| --- | --- | --- |
-| Unit | chapter → lessons | agenda topics |
-| Scripts | yes (`script/ch{N}/script_c{N}_l{M}.md`) | **none** |
-| Slides | one deck **per lesson** | **one** deck for the whole workshop |
-| Folders | `chapter_{N}/l{M}/` | `NN_topic_name/` (e.g. `01_intro`) |
+| | **Course** |
+| --- | --- |
+| Unit | chapter → lessons |
+| Scripts | yes (`script/ch{N}/script_c{N}_l{M}.md`) |
+| Slides | one deck **per lesson** |
+| Folders | `chapter_{N}/l{M}/` |
 
 ## The `spec/` folder (source of truth)
 
-All development docs live in `spec/` inside your **course/workshop repo** (not the
+All development docs live in `spec/` inside your **course repo** (not the
 marketplace):
 
-- `course-spec.md` / `workshop-spec.md` — overview, requirements, profile,
-  structure, build mode, implementation plan + status.
-- `naming-convention.md` (course) — folder/file/title rules.
-- `learning-goals.md` (course) / `agenda.md` (workshop) — syllabus / topic list.
+- `course-spec.md` — overview, requirements, profile, structure, build mode,
+  implementation plan + status.
+- `naming-convention.md` — folder/file/title rules.
+- `learning-goals.md` — syllabus.
 - `continuity.md` — the **continuity ledger + promise tracker** (below).
 - `open-items.md` — blockers / deferrals / follow-ups.
-- `scope-chapter-{N}.md` (course) — per-chapter scope, written just before building.
+- `scope-chapter-{N}.md` — per-chapter scope, written just before building.
 
 Because the spec — not the chat — is authoritative, builds are **resumable**: stop
 after Chapter 2, build Chapter 3 next week, and the thread holds.
@@ -74,10 +78,8 @@ with a `spec/style/` folder. See `skills/course-builder/profiles/README.md`.
 
 ## Workflow
 
-1. **Discovery** → course/workshop? scope, audience, objectives, profile,
-   materials, build mode.
-2. **Architect** the structure (chapters/lessons or agenda topics); it challenges
-   weak ordering.
+1. **Discovery** → scope, audience, objectives, profile, materials, build mode.
+2. **Architect** the structure (chapters/lessons); it challenges weak ordering.
 3. **Write the spec** → **Checkpoint 1** (you approve).
 4. **Per stage**: scope → content-creator → slides → QA → update continuity →
    **Checkpoint** (step-by-step).

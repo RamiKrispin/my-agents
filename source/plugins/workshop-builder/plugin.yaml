@@ -1,0 +1,12 @@
+# Plugin manifest (source of truth) — FLAT key/value format.
+# Per docs/adding-a-plugin.md. Bump version on every change; run scripts/build.py.
+
+name: workshop-builder
+description: Build a workshop stage-by-stage from a spec, in your voice, with continuity tracking and an independent QA pass. Single combined slide deck by default; per-topic split on request; topic READMEs only when asked.
+version: 0.1.0
+author_name: Rami Krispin
+author_url: https://github.com/RamiKrispin
+homepage: https://github.com/RamiKrispin/my-agents
+license: MIT
+category: content
+keywords: [workshop, education, slides, teaching, content]

@@ -24,7 +24,7 @@ Representative phrases (each < 25 words):
 - "Let's make this concrete." (into a demo)
 - "That's {X}: {one-line summary}." (closing a concept)
 
-## Script structure (course mode)
+## Script structure
 
 ```
 # Chapter N — Lesson M: Title

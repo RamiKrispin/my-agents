@@ -11,7 +11,8 @@
 
 ## Notes
 
-- Each topic gets a `NN_topic_name/` folder with a `README.md` and its supporting
-  code/docs.
-- The whole workshop shares one slide deck (`slides/workshop_slides.html`); each
-  topic is a section in that deck.
+- Each topic gets a `NN_topic_name/` folder for supporting code/docs. A topic
+  `README.md` is only emitted when `spec/workshop-spec.md` opts in.
+- Slides live under `slides/`. By default it's a single combined deck
+  (`slides/workshop_slides.html`); set the spec to `per-topic` to split into
+  `slides/NN_topic_name.html`.

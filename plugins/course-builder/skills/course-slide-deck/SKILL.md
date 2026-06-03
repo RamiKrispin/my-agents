@@ -1,21 +1,24 @@
 ---
 name: course-slide-deck
-description: Build HTML slide decks for course lessons and workshops. Presentation-scale typography, viewport-locked slides with cross-fade transitions, top-anchored content, and a clean unadorned canvas (only a slim progress bar). Use whenever creating a lesson's slides.html (course) or the combined workshop deck. Theme comes from the active profile's slide-style.
+description: Build HTML slide decks for course lessons. Presentation-scale typography, viewport-locked slides with cross-fade transitions, top-anchored content, and a clean unadorned canvas (only a slim progress bar). Use whenever creating a lesson's slides.html. Theme comes from the active profile's slide-style.
 ---
 
 # Course slide-deck skill
 
 A portable engine + visual language for consistent HTML slide decks. Used by the
-course-builder content step. Keep the typography, layout, and nav script
-identical across decks; vary the per-slide infographics to match the content.
+course-builder content step (one deck per lesson). Keep the typography, layout,
+and nav script identical across decks; vary the per-slide infographics to match
+the content.
 
 This skill is **profile-themed**: the active profile's `slide-style.md` chooses
 the tokens and the title-slide branding. Don't hardcode a course name.
 
+> Building workshop slides? Use the **workshop-slide-deck** skill in the
+> sibling workshop-builder plugin.
+
 ## When to use
 
 - A course lesson `slides_c{N}_l{M}.html` (one deck per lesson).
-- A workshop's single combined deck `slides/workshop_slides.html` (one section per topic).
 - Any slides that must match the course visual format.
 
 Don't use it for the lesson script or README (separate artifacts), or for
@@ -23,23 +26,20 @@ non-course decks.
 
 ## Inputs
 
-- **Course:** the lesson script `script_c{N}_l{M}.md` — each `[CLICK]` marker is
-  roughly one slide boundary. Plan ~8–12 slides per lesson.
-- **Workshop:** the topic READMEs + agenda — one section of the combined deck per
-  topic (title divider + that topic's content slides).
+- The lesson script `script_c{N}_l{M}.md` — each `[CLICK]` marker is roughly
+  one slide boundary. Plan ~8–12 slides per lesson.
 - The active **profile** `slide-style.md` (theme + branding) and the references
   below.
 
 ## Authoring workflow
 
-1. **Read the source** (script for a lesson; topic READMEs for a workshop) and
-   the profile's `slide-style.md`.
+1. **Read the source** (the script for the lesson) and the profile's
+   `slide-style.md`.
 2. **Plan slide types.** Every lesson deck has: 1 title + 1 "where we are" +
-   several content slides + 1 takeaway. A workshop deck has 1 title + per-topic:
-   a section divider + content slides, and a final takeaway.
+   several content slides + 1 takeaway.
 3. **Start from `templates/base-deck.html`.** Set the title-slide
-   `{{COURSE_BRANDING}}` from the course/workshop title. Add per-slide CSS only
-   for visuals the boilerplate doesn't already cover.
+   `{{COURSE_BRANDING}}` from the course title. Add per-slide CSS only for
+   visuals the boilerplate doesn't already cover.
 4. **Test in a browser** — keyboard nav (`←`/`→`/`space`) and the progress bar.
 5. **Check the tallest slide fits `100vh`** (slides are hard-capped, `overflow:hidden`).
    Trim or split rather than letting content scroll.

@@ -11,7 +11,7 @@ friendly, and concrete. For principle/workflow courses, prefer the
 - Show, don't just tell — pair concepts with a concrete example.
 - Plain language over jargon; no hype adjectives.
 
-## Script structure (course mode)
+## Script structure
 
 - H1 `# Chapter N — Lesson M: Title`; open with the learning goal.
 - `[CLICK]` marks each slide advance (≈ one beat per slide).

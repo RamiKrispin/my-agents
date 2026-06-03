@@ -12,6 +12,8 @@
 - **Duration / format:** {{half-day | full-day | 90 min}}, {{in-person | virtual}}
 - **Profile:** {{design-principles}}
 - **Build mode:** {{step-by-step | all-at-once}}
+- **Slide split:** {{combined | per-topic}}   <!-- default: combined -->
+- **Topic READMEs:** {{off | on}}              <!-- default: off -->
 
 ## Requirements
 
@@ -49,8 +51,19 @@ Build **one topic at a time** unless the build mode is all-at-once.
 
 ## Slides
 
-A **single** deck for the whole workshop at `slides/workshop_slides.html`, with
-one section per topic.
+Pick one **slide split** in the Overview block above:
+
+- **combined** (default): a single deck at `slides/workshop_slides.html` with
+  one section per topic.
+- **per-topic**: one deck per topic at `slides/NN_topic_name.html`.
+
+The `slides/` folder is created if it doesn't exist.
+
+## Topic READMEs
+
+Off by default — topic folders only carry supporting code/assets. Set
+**Topic READMEs: on** above to emit a `README.md` in each `NN_topic_name/`
+following `templates/topic-README.md`.
 
 ## Conventions
 

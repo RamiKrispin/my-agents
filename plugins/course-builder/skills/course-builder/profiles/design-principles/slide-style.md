@@ -16,13 +16,12 @@ engine; this file records the theme choices for this profile.
 ## Conventions for this profile
 
 - **Branding line** on the title slide (`{{COURSE_BRANDING}}`): set from the
-  course/workshop title, e.g. `"{Course Title} · {tagline}"`.
+  course title, e.g. `"{Course Title} · {tagline}"`.
 - **Title-art motif:** pick an abstract SVG that matches the lesson topic
   (layers for Dockerfiles, grid for management, arrows for workflows).
 - **Color semantics are locked:** green = good/running, amber = warning/build-time,
   red = bad/anti-pattern, violet/pink = secondary highlights.
-- Per-lesson decks (course) start from `base-deck.html`; the workshop deck is one
-  file with a title + a section per topic.
+- Per-lesson decks start from `base-deck.html`.
 
 See `course-slide-deck/references/slide-patterns.md` for the layout catalog and
 the skill's anti-patterns list.

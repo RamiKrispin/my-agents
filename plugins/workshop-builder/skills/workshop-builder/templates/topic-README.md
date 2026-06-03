@@ -2,6 +2,9 @@
 
 > Goal: {{what attendees will do or learn in this topic}}.
 
+> **Note:** topic READMEs are emitted only when `spec/workshop-spec.md` opts in
+> (`Topic READMEs: on`). The default is to skip them.
+
 ## Overview
 
 {{1–2 short paragraphs framing the topic — why before what.}}
