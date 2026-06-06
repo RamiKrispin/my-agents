@@ -1,0 +1,12 @@
+# Plugin manifest (source of truth) — FLAT key/value format.
+# Per docs/adding-a-plugin.md. Bump version on every change; run scripts/build.py.
+
+name: campaign-builder
+description: Build a multi-platform promotion campaign from a course-builder, workshop-builder, or LinkedIn-Learning-style course folder. Produces a `campaigns/<slug>/` tree with one folder per topic, drafts per chosen platform (LinkedIn, X, Bluesky, Threads, Instagram carousel, Reels, video script, blog), QA notes inline, and a `campaign.md` proposal that the user approves before fan-out.
+version: 0.1.3
+author_name: Rami Krispin
+author_url: https://github.com/RamiKrispin
+homepage: https://github.com/RamiKrispin/my-agents
+license: MIT
+category: content
+keywords: [campaign, course, social, linkedin, x, bluesky, threads, instagram, reels, tiktok, blog, multi-platform, content]
