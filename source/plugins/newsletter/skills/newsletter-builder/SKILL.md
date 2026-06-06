@@ -26,6 +26,41 @@ If sections or links are missing, ask once, concisely. Don't proceed on guesses.
 If the issue number is missing, ask for it (or infer the next number from the
 most recent file in `style/examples/`).
 
+## Output location
+
+Drafts are written to the **user's current working directory** (where they
+invoked the skill from), **never inside this skill's / plugin's folder**. The
+files under this skill (`sections/`, `style/`, `templates/`, `scripts/`) are
+read-only resources at runtime — only ever read them, never write next to them.
+
+Resolve the output directory at the start of every run, before researching or
+drafting:
+
+1. **Read** the cwd's `CLAUDE.md` (if present). If it has a
+   `## Skill output paths` section with a `newsletter-builder: <path>` bullet,
+   use that path (relative to cwd). Skip to "Save".
+2. **Otherwise** (no `CLAUDE.md`, or no `newsletter-builder` line in it), ask
+   the user **once**, concisely:
+   - Confirm the cwd is the right place (print it).
+   - Propose `drafts/` as the default folder. Let them accept, pick another
+     path, or save to the cwd directly.
+   - Ask whether to **remember** the choice for future runs by adding a line to
+     the cwd's `CLAUDE.md`. If yes:
+     - Create `CLAUDE.md` if it doesn't exist.
+     - If a `## Skill output paths` section already exists, append a bullet to
+       it. Otherwise append the section at the end:
+       ```markdown
+       ## Skill output paths
+
+       - newsletter-builder: <chosen-path>
+       ```
+     - Do **not** rewrite or reorder the rest of `CLAUDE.md`.
+   - Create the chosen folder if it doesn't exist, then proceed.
+3. **Safety net:** if the cwd looks like a clone of this marketplace repo (it
+   contains `source/plugins/` or `.claude-plugin/marketplace.json`), refuse to
+   write there by default — ask the user for an explicit output directory
+   outside the marketplace before continuing.
+
 ## Workflow
 
 Run these in order. Load the voice **before** drafting (step 4 reads `style/`),
@@ -71,8 +106,11 @@ so sections are written in voice from the first draft, not just polished at the 
    `python3 scripts/research.py validate <draft>` (structural check) and
    `python3 scripts/research.py check <urls>` (confirm links resolve).
 
-7. **Save** — write to `drafts/issue-YYYY-MM-DD.md` (create `drafts/` if needed,
-   date = today). Print the path and a short note of what QA changed.
+7. **Save** — write to `<output-dir>/issue-YYYY-MM-DD.md` where `<output-dir>`
+   is the path resolved in **Output location** above (default `drafts/`,
+   relative to cwd; date = today). Create the folder if it doesn't exist.
+   **Never write inside the skill / plugin folder.** Print the absolute path
+   and a short note of what QA changed.
 
 ## QA checklist
 

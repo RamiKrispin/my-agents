@@ -18,6 +18,45 @@ if something can't be verified, ask or flag it.
 > [workshop-builder](../../../workshop-builder/) plugin (single combined deck
 > by default, slides under `slides/`, no scripts, opt-in topic READMEs).
 
+## Output location
+
+Course outputs (`spec/`, `chapter_{N}/`, `script/`, slides, supporting files)
+are written to the **user's current working directory** — the target course
+repo — **never inside this skill's / plugin's folder**. The files under this
+skill (`templates/`, `profiles/`, `references/`) are read-only resources at
+runtime; only ever read them, never write next to them.
+
+Resolve the output base directory at the start of every run, before scoping or
+building:
+
+1. **Read** the cwd's `CLAUDE.md` (if present). If it has a
+   `## Skill output paths` section with a `course-builder: <path>` bullet, use
+   that path as the course root (relative to cwd, or absolute). Skip to "build".
+2. **Otherwise** (no `CLAUDE.md`, or no `course-builder` line in it), ask the
+   user **once**, concisely:
+   - Confirm the cwd is the right course repo (print it).
+   - Offer a default of `.` (the cwd itself, since course outputs are top-level
+     folders in the target repo). Let them pick a subdirectory if they prefer.
+   - Ask whether to **remember** the choice for future runs by adding a line to
+     the cwd's `CLAUDE.md`. If yes:
+     - Create `CLAUDE.md` if it doesn't exist.
+     - If a `## Skill output paths` section already exists, append a bullet to
+       it. Otherwise append the section at the end:
+       ```markdown
+       ## Skill output paths
+
+       - course-builder: <chosen-path>
+       ```
+     - Do **not** rewrite or reorder the rest of `CLAUDE.md`.
+   - Create the chosen folder if it doesn't exist, then proceed.
+3. **Safety net:** if the cwd looks like a clone of the my-agents marketplace
+   repo (contains `source/plugins/` or `.claude-plugin/marketplace.json`),
+   refuse to write there by default — ask the user for an explicit course
+   directory outside the marketplace before continuing.
+
+All paths in the rest of this skill (`spec/...`, `chapter_{N}/...`,
+`script/...`) are interpreted relative to that resolved output base.
+
 ## What this skill produces
 
 | | **Course** |

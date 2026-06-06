@@ -3,7 +3,7 @@
 
 name: workshop-builder
 description: Build a workshop stage-by-stage from a spec, in your voice, with continuity tracking and an independent QA pass. Single combined slide deck by default; per-topic split on request; topic READMEs only when asked.
-version: 0.1.0
+version: 0.1.1
 author_name: Rami Krispin
 author_url: https://github.com/RamiKrispin
 homepage: https://github.com/RamiKrispin/my-agents

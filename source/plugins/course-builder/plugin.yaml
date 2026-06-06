@@ -3,7 +3,7 @@
 
 name: course-builder
 description: Build a course stage-by-stage from a spec, in your voice, with continuity tracking and an independent QA pass.
-version: 0.2.0
+version: 0.2.1
 author_name: Rami Krispin
 author_url: https://github.com/RamiKrispin
 homepage: https://github.com/RamiKrispin/my-agents

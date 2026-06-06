@@ -23,4 +23,6 @@ A short note after any link (why it's interesting) is welcome — use it.
 Then follow the newsletter-builder skill end to end: research each link, draft
 the three sections in the fixed order, write in my voice (the skill's `style/`),
 run the QA checklist and `scripts/research.py validate`, then save the draft to
-`drafts/issue-YYYY-MM-DD.md` and show me the result.
+the configured output directory (default `drafts/issue-YYYY-MM-DD.md` in the
+current working directory — see the skill's **Output location** section; never
+inside the plugin) and show me the result.

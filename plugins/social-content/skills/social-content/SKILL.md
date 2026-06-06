@@ -39,6 +39,47 @@ group:     template | <filename.md>
 If the user just says "make a LinkedIn post about X", that's a `topic` source —
 ask for 3-7 bullets they want covered, plus pick a template.
 
+## Output location
+
+Drafts (`posts/<template>-post.md`, `posts/<template>-reels.md`, custom
+`posts/<filename>`, and sidecars under `posts/assets/`) are written to the
+**user's current working directory** — **never inside this skill's / plugin's
+folder**. The files under this skill (`profiles/`, `formats/`, `sources/`,
+`scripts/`) are read-only resources at runtime; only ever read them, never
+write next to them.
+
+Resolve the output base directory at the start of every run, before drafting:
+
+1. **Read** the cwd's `CLAUDE.md` (if present). If it has a
+   `## Skill output paths` section with a `social-content: <path>` bullet, use
+   that path as the parent of `posts/` (relative to cwd, or absolute). Skip to
+   "Save".
+2. **Otherwise** (no `CLAUDE.md`, or no `social-content` line in it), ask the
+   user **once**, concisely:
+   - Confirm the cwd is the right place (print it).
+   - Propose `.` (so drafts land at `<cwd>/posts/...`) as the default. Let
+     them pick another path if they prefer.
+   - Ask whether to **remember** the choice for future runs by adding a line to
+     the cwd's `CLAUDE.md`. If yes:
+     - Create `CLAUDE.md` if it doesn't exist.
+     - If a `## Skill output paths` section already exists, append a bullet to
+       it. Otherwise append the section at the end:
+       ```markdown
+       ## Skill output paths
+
+       - social-content: <chosen-path>
+       ```
+     - Do **not** rewrite or reorder the rest of `CLAUDE.md`.
+   - Create the chosen folder + its `posts/` subfolder if they don't exist,
+     then proceed.
+3. **Safety net:** if the cwd looks like a clone of the my-agents marketplace
+   repo (contains `source/plugins/` or `.claude-plugin/marketplace.json`),
+   refuse to write there by default — ask the user for an explicit output
+   directory outside the marketplace before continuing.
+
+All `posts/...` paths in the rest of this skill are interpreted relative to
+that resolved output base.
+
 ## Workflow
 
 Run these in order. Load voice + the chosen template's example posts **before**
