@@ -1,7 +1,8 @@
 <!-- Assembly template for one issue. Fill the {{...}} placeholders.
      Section order is FIXED: Open Source -> Learning -> Book. Keep the intro,
-     cross-post line, separators, and sign-off verbatim. Omit the promo block if
-     the user gives no course/promo to feature. -->
+     cross-post line, separators, sign-off, and disclaimer verbatim. Omit the
+     promo block if the user gives no course/promo to feature. The AI
+     disclaimer at the very bottom is ALWAYS included — never drop it. -->
 
 # {{highlight}}, {{highlight}} | Issue {{N}}
 
@@ -48,3 +49,7 @@ Thanks,
 Rami
 
 Thanks for reading Rami's Data Newsletter! Subscribe for free to receive new posts and support my work.
+
+---
+
+_Disclaimer: I use AI to help edit the content in this newsletter. If you spot a mistake, please leave a comment — I'd appreciate the heads-up._

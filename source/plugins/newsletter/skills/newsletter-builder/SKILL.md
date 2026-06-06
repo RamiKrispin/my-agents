@@ -99,8 +99,10 @@ so sections are written in voice from the first draft, not just polished at the 
    guide's "Avoid" list (no hype adjectives, no marketing language).
 
 5. **Assemble** — use `templates/newsletter-template.md`: intro, the three
-   sections in the **fixed order** (Open Source → Learning → Book), sign-off.
-   Never reorder sections.
+   sections in the **fixed order** (Open Source → Learning → Book), sign-off,
+   and the AI disclaimer at the very bottom. The disclaimer is **always
+   included verbatim** — never edit, paraphrase, or drop it. Never reorder
+   sections.
 
 6. **QA** — run the checklist below and fix issues. Then run
    `python3 scripts/research.py validate <draft>` (structural check) and
@@ -115,7 +117,8 @@ so sections are written in voice from the first draft, not just polished at the 
 ## QA checklist
 
 - **Structure**: all three sections present, correct order, correct headings;
-  intro and sign-off present.
+  intro, sign-off, and the AI disclaimer at the bottom are present (the
+  disclaimer is included verbatim, not paraphrased).
 - **Content**: every claim traces to a researched source; no hallucinated
   features; each item has a working link; the book has title **and** author.
 - **Style**: matches `style/voice-guide.md`; section lengths within their ranges
