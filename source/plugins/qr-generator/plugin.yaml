@@ -1,0 +1,12 @@
+# Plugin manifest (source of truth) — FLAT key/value format.
+# Per docs/adding-a-plugin.md. Bump version on every change; run scripts/build.py.
+
+name: qr-generator
+description: Convert a website link (or any short string) into a scannable QR code PNG. Use whenever a slide, infographic, flyer, business card, or printed asset needs a scan target. macOS-first via CoreImage with Python and CLI fallbacks.
+version: 0.1.0
+author_name: Rami Krispin
+author_url: https://github.com/RamiKrispin
+homepage: https://github.com/RamiKrispin/my-agents
+license: MIT
+category: productivity
+keywords: [qr, qrcode, link, share, infographic, slides, print]
