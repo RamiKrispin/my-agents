@@ -18,10 +18,12 @@ The user will pick a **source**, a **format**, and (optionally) a **template**.
 Ask once and concisely for anything missing — don't proceed on guesses.
 
 ```
-source:    course | workshop | newsletter | topic
+source:    course | workshop | newsletter | topic | url
            # course/workshop: path to the built output dir
            # newsletter: path to a drafts/issue-*.md file
-           # topic: a one-line topic + 3-7 bullet points the user provides
+           # topic:   a one-line topic + 3-7 bullet points the user provides
+           # url:     a public link (YouTube, podcast, article, docs page) —
+           #          researched in step 2 to build the fact sheet
 format:    linkedin | reels        # default: linkedin
 template:  list | lesson | contrarian | comparison | learning-resource | opinion | <other>
            # must match a subfolder in profiles/default/examples/
@@ -36,8 +38,10 @@ group:     template | <filename.md>
            #         (e.g. group: 2026-q2-launch.md → posts/2026-q2-launch.md)
 ```
 
-If the user just says "make a LinkedIn post about X", that's a `topic` source —
-ask for 3-7 bullets they want covered, plus pick a template.
+If the user gives a URL ("make a LinkedIn post about
+https://youtube.com/..."), that's a `url` source — see
+`sources/from-url.md`. If they describe a topic without a URL, that's a
+`topic` source — ask for 3-7 bullets and a template.
 
 ## Output location
 
@@ -93,6 +97,10 @@ drafting, so the first draft is already in voice and shape.
    - `sources/from-workshop.md` — read a workshop-builder output dir
    - `sources/from-newsletter.md` — repurpose a newsletter draft
    - `sources/from-topic.md` — free-form topic + bullets
+   - `sources/from-url.md` — research a URL (video, article, blog post,
+     podcast). Try WebFetch first; for fetch-hostile pages (YouTube,
+     Coursera, Udemy, Medium, JS apps) fall back to
+     `python3 scripts/research.py render <url>`.
    Build a fact sheet: 5-15 concrete claims with citations (file path or URL).
    Anything you can't ground stays out of the draft.
 
@@ -203,8 +211,12 @@ Output `PASS`, or a bulleted `FAIL` list, and fix before saving.
 - `formats/infographic-spec.md` — designer-facing infographic brief format.
 - `formats/drawio-diagram.md` — when to use drawio + the flat node spec format
   consumed by `scripts/build_drawio.py`.
-- `sources/from-{course,workshop,newsletter,topic}.md` — source-specific
+- `sources/from-{course,workshop,newsletter,topic,url}.md` — source-specific
   ingestion guides.
+- `scripts/research.py` — zero-dep stdlib: render a fetch-hostile page (JS
+  apps / bot-blocked sites like YouTube, Coursera, Medium) via the public
+  r.jina.ai reader and print clean Markdown. Mirrors newsletter-builder's
+  `render` subcommand.
 - `scripts/build_drawio.py` — zero-dep stdlib: emit a `.drawio` XML file from
   a flat JSON node spec.
 - `scripts/validate.py` — offline checklist for a saved draft. Auto-detects

@@ -1,7 +1,7 @@
 # Source: free-form topic + bullets
 
 When the user wants a post about a topic that **isn't** sourced from a course,
-workshop, or newsletter. They provide:
+workshop, newsletter, or single URL. They provide:
 
 - A one-line **topic** (e.g. "5 Python libraries for time series forecasting").
 - **3-7 bullets** they want covered (the substance — not the post structure).
@@ -11,6 +11,10 @@ workshop, or newsletter. They provide:
 This is the path for templated posts like "top N X for Y" — the example you
 gave: *5 Python libraries for time series forecasting* and
 *top 10 courses for deep learning*.
+
+> If the topic is a single URL (a YouTube video, podcast episode, article,
+> or blog post), see `from-url.md` instead — the skill will research the
+> link to build the fact sheet rather than asking the user for bullets.
 
 ## What to ask if anything's missing
 
