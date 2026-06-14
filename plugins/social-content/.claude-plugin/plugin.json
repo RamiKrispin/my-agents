@@ -1,7 +1,7 @@
 {
   "name": "social-content",
-  "version": "0.2.4",
-  "description": "Draft LinkedIn posts and short-form video (Reels / TikTok) scripts in your voice, sourced from a course-builder run, a workshop-builder run, a newsletter issue, or a free-form topic. Aggregates drafts into per-template posts/<template>-post.md files in the working directory (newest at top). Optional infographic spec or drawio diagram on request.",
+  "version": "0.3.0",
+  "description": "Draft LinkedIn posts, Reels / TikTok scripts, or newsletter sections in your voice, sourced from a course-builder run, a workshop-builder run, a newsletter issue, or a free-form topic. Aggregates LinkedIn / Reels drafts into per-template posts/<template>-post.md files (newest at top); newsletter sections write to posts/<slug>-newsletter.md and can be injected directly into a newsletter pre-draft. Optional infographic spec or drawio diagram on request.",
   "author": {
     "name": "Rami Krispin",
     "url": "https://github.com/RamiKrispin"
@@ -13,6 +13,7 @@
     "linkedin",
     "reels",
     "tiktok",
+    "newsletter",
     "content",
     "infographic",
     "drawio"

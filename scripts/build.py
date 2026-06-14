@@ -275,6 +275,28 @@ def process_plugin(plugin_dir: Path) -> dict:
     if mcp_file.is_file():
         shutil.copy2(mcp_file, cc_root / ".mcp.json")
 
+    # Cross-plugin imports: copy files from another plugin's source tree into
+    # this plugin's built output. Lets two plugins share a single source of
+    # truth (e.g. a format spec) without duplicating it. Format per entry:
+    # `<src-relative-to-source/plugins> > <dst-relative-to-built-plugin>`.
+    imports = meta.get("imports") or []
+    if isinstance(imports, str):
+        imports = [imports]
+    for spec in imports:
+        if ">" not in spec:
+            sys.exit(f"error: invalid imports entry in {plugin_dir.name}/plugin.yaml: "
+                     f"'{spec}' (expected 'src > dst')")
+        src_rel, dst_rel = (s.strip() for s in spec.split(">", 1))
+        src = SRC_PLUGINS / src_rel
+        dst = cc_root / dst_rel
+        if not src.exists():
+            sys.exit(f"error: imports source not found in {plugin_dir.name}: {src_rel}")
+        if src.is_file():
+            dst.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(src, dst)
+        else:
+            shutil.copytree(src, dst, dirs_exist_ok=True)
+
     # Marketplace entry.
     entry = {
         "name": name,

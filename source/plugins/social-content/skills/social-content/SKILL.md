@@ -24,16 +24,24 @@ source:    course | workshop | newsletter | topic | url
            # topic:   a one-line topic + 3-7 bullet points the user provides
            # url:     a public link (YouTube, podcast, article, docs page) —
            #          researched in step 2 to build the fact sheet
-format:    linkedin | reels        # default: linkedin
+format:    linkedin | reels | newsletter-section   # default: linkedin
+           # newsletter-section drafts a section body shaped to drop into a
+           # newsletter-builder issue (Open Source / Learning / Book slots).
 template:  list | lesson | contrarian | comparison | learning-resource | opinion | <other>
            # must match a subfolder in profiles/default/examples/
            # if omitted, recommend one based on the source material
+           # IGNORED for format: newsletter-section (template axis doesn't apply).
+newsletter-type: open-source | learning | book   # only for format: newsletter-section
+                                                # if omitted, classify from source (see below)
+newsletter-draft: skip | new | <path>             # only for format: newsletter-section
+                                                  # if omitted, prompt at the end of the run
 infographic: yes | no              # default: no (on request only)
 diagram:   none | drawio           # default: none (on request only)
 slug:      <short-kebab-case>      # used in metadata + sidecar filenames
 group:     template | <filename.md>
            # default: template — writes to posts/<template>-post.md (linkedin)
            #                     or  posts/<template>-reels.md (reels)
+           #                     or  posts/<slug>-newsletter.md (newsletter-section)
            # custom: any filename — writes to posts/<filename>
            #         (e.g. group: 2026-q2-launch.md → posts/2026-q2-launch.md)
 ```
@@ -114,6 +122,13 @@ drafting, so the first draft is already in voice and shape.
    commentary** strategy in `best-practices.md`). If no folder fits, ask the
    user which template to use.
 
+   **Skip this step entirely for `format: newsletter-section`** — that
+   format has its own three sub-shapes keyed by content type, not by the
+   social-template axis. Instead, classify the content type: use
+   `newsletter-type` if it was passed; otherwise classify from the source
+   per the rules in `formats/newsletter-section.md` (canonical home). If the
+   source is ambiguous, ask the user once — don't guess.
+
 4. **Load voice + template exemplars** — read in this order:
    - `profiles/default/voice-guide.md` (high-level voice)
    - `profiles/default/best-practices.md` (LinkedIn course distilled — 4 posting strategies + 4 post elements + cadence + anti-patterns)
@@ -122,13 +137,26 @@ drafting, so the first draft is already in voice and shape.
    The example posts are the source of truth for the template's hook, structure,
    length, white space, and ending. Match them.
 
+   **For `format: newsletter-section`**, skip the LinkedIn template
+   exemplars (they don't apply) and instead read:
+   - `profiles/default/voice-guide.md`, `best-practices.md`, `pillars.md`
+     as above (voice still rules).
+   - `formats/newsletter-section.md` (this skill's scaffold for the three
+     sub-shapes — covers classification, voice register, output file).
+   - `formats/newsletter-sections/<newsletter-type>.md` (the canonical
+     section format spec — owned by the `newsletter` plugin and imported
+     here at build time). Follow it exactly.
+
 5. **Draft** — follow the format scaffold:
    - LinkedIn → `formats/linkedin-post.md`
    - Reels / TikTok → `formats/reels-script.md`
+   - Newsletter section → `formats/newsletter-section.md` plus the
+     type-specific spec at `formats/newsletter-sections/<newsletter-type>.md`
    The draft must obey both the format scaffold and the patterns observed in the
    chosen example folder. The template wins on hook + structure; the format
    scaffold wins on platform-specific shape (line breaks, on-screen text cues,
-   etc.).
+   etc.). Newsletter-section drafts have no template axis — the type-specific
+   spec wins on shape; the voice files win on register.
 
 6. **Add-ons** (only if requested):
    - **Infographic spec** → write a sidecar to `posts/assets/<slug>.infographic.md`
@@ -140,10 +168,13 @@ drafting, so the first draft is already in voice and shape.
      when the post benefits from an architecture/flow diagram — see
      `formats/drawio-diagram.md`.
 
-7. **QA** — write the post body to a temporary file, then run
-   `python3 scripts/validate.py <body.md>` (offline structural check). Iterate
-   on the body until validate.py prints `PASS` and the QA checklist below
-   passes. **Do not append to the aggregated file until QA passes.**
+7. **QA** — write the post body to a temporary file, then run the validator
+   for the chosen format:
+   - `linkedin` / `reels` → `python3 scripts/validate.py <body.md>`
+   - `newsletter-section` → `python3 scripts/validate_newsletter_section.py <newsletter-type> <body.md>`
+   Iterate on the body until the validator prints `PASS` and the QA
+   checklist below passes. **Do not append to the aggregated file (linkedin
+   / reels) or write the final draft (newsletter-section) until QA passes.**
 
 8. **Save** — append the entry to a per-template aggregated file in the
    **user's working directory** (NOT inside the plugin):
@@ -171,27 +202,85 @@ drafting, so the first draft is already in voice and shape.
      collapsible `<details>` block, hidden by default in rendered Markdown.
    - **Sidecars:** drawio / infographic files live in `posts/assets/<slug>.<ext>`,
      referenced from the post entry via relative links.
-   - Print the file path written and a one-line summary of what was added.
+
+   **For `format: newsletter-section`**, the save shape is different —
+   each draft is a self-contained section body intended to be inlined into
+   a newsletter issue, not aggregated:
+   - **Default file:** `posts/<slug>-newsletter.md` (no H1, no metadata
+     wrapper — the literal section body that would be inlined under the
+     newsletter's `## Open Source of the Week` / `## New Learning
+     Resources` / `## Book of the Week` heading).
+   - **Override:** if the user passed `group: <filename.md>`, write to
+     `posts/<filename>` literally.
+   - **No `append_post.py`** — write the file directly with `Write`, since
+     there's no aggregated wrapper to maintain.
+   - **No sidecars** by default — newsletter sections don't ship with
+     infographics or drawio attachments. If the user explicitly requested
+     one, place it under `posts/assets/<slug>.<ext>` as usual.
+
+   Print the file path written and a one-line summary of what was added.
+
+9. **Newsletter pre-draft injection** — only for `format: newsletter-section`,
+   only after QA + step 8 have written the local section file.
+
+   Resolve the newsletter output directory from the cwd's `CLAUDE.md`
+   `## Skill output paths` section (look for a `newsletter-builder: <path>`
+   bullet). If absent, ask the user once for the directory; offer to add a
+   bullet to `CLAUDE.md` for next time. The default folder is `drafts/`
+   relative to cwd.
+
+   Decide what to do based on `newsletter-draft`:
+   - `skip` (or user declines when prompted) — done.
+   - `new` — pick today's `issue-YYYY-MM-DD.md` under the newsletter
+     output directory (refuse if it already exists; suggest `--append`
+     instead). Run:
+     ```
+     python3 scripts/inject_section.py --new <newsletter-out>/issue-YYYY-MM-DD.md \
+       --type <newsletter-type> <section-file>
+     ```
+     The helper builds a fresh pre-draft from the imported newsletter
+     template, fills the chosen slot with the section content, and leaves
+     the other two slots as TODO placeholders.
+   - `<existing path>` — run:
+     ```
+     python3 scripts/inject_section.py --append <path> --type <newsletter-type> <section-file>
+     ```
+     The helper appends the new section content under the matching `## ...`
+     heading. Any existing content in that section is preserved and
+     separated from the new content by a horizontal rule.
+
+   If `newsletter-draft` was not passed, prompt the user once at the end of
+   the run with three choices: `skip` / `new` / `<existing-draft-path>` (offer
+   a list of existing `issue-*.md` files in the resolved directory if any).
+
+   Print the pre-draft path written / appended-to and a one-line summary.
 
 ## QA checklist
 
 - **Source-grounded**: every concrete claim (number, library, feature, stat,
   quote) traces to the fact sheet from step 2. No invented features. No vague
   "research shows" without a source.
-- **Hook on line 1**: the first line creates curiosity, surprise, a contrarian
-  take, or a specific outcome. It works as a standalone (LinkedIn truncates).
+- **Hook on line 1** *(LinkedIn / Reels only)*: the first line creates
+  curiosity, surprise, a contrarian take, or a specific outcome. It works as
+  a standalone (LinkedIn truncates). **Newsletter sections** open with the
+  section spec's prescribed framing instead — not a hook.
 - **One idea**: a reader can summarize the post in one sentence. If you find
   yourself teaching two unrelated things, split it.
-- **Structure matches the chosen template's example posts** — sections, lengths,
-  use of bullets/lists, white space pattern.
+- **Structure matches the chosen template's example posts** *(LinkedIn /
+  Reels)* — sections, lengths, use of bullets/lists, white space pattern.
+  **Newsletter sections** must match the imported type-specific spec at
+  `formats/newsletter-sections/<newsletter-type>.md` exactly (heading levels,
+  bullet shape, link policy, license / publisher lines).
 - **Voice**: matches `voice-guide.md` and the example posts. No banned phrases
   from the "Avoid" list (no hype adjectives, no marketing language, no "Agree?",
   no "Thoughts?").
-- **Mobile-readable**: short paragraphs (mostly 1-3 lines). White space between
-  ideas. Lists where appropriate.
-- **Ending**: takeaway, question, or discussion prompt — not a generic "Agree?".
-- **CTA / promo discipline**: respects the 70/20/10 rule (mostly teach; promote
-  rarely).
+- **Mobile-readable** *(LinkedIn / Reels)*: short paragraphs (mostly 1-3
+  lines). White space between ideas. Lists where appropriate.
+- **Ending** *(LinkedIn / Reels)*: takeaway, question, or discussion prompt
+  — not a generic "Agree?". Newsletter sections close per their spec
+  (license line / "ideal for ..." / etc.), not with a CTA.
+- **CTA / promo discipline** *(LinkedIn / Reels)*: respects the 70/20/10
+  rule (mostly teach; promote rarely).
 - **Reels-only**: hook within the first 3 seconds; on-screen text cues present;
   one clear takeaway; under target length (typically 30-90s).
 
@@ -208,6 +297,16 @@ Output `PASS`, or a bulleted `FAIL` list, and fix before saving.
 - `formats/linkedin-post.md` — generic LinkedIn structure scaffold.
 - `formats/reels-script.md` — Reels / TikTok script scaffold (hook, beats,
   on-screen text, captions, CTA).
+- `formats/newsletter-section.md` — scaffold for a body shaped to drop into
+  a newsletter-builder issue (Open Source / Learning / Book sub-shapes).
+- `formats/newsletter-sections/{open-source,learning,book}.md` — canonical
+  type-specific section format specs. **Owned by the `newsletter` plugin**
+  (`newsletter/skills/newsletter-builder/sections/`) and copied here at
+  build time via `imports:` in `plugin.yaml`. Edit them in the newsletter
+  source tree, not here.
+- `formats/newsletter-template.md` — canonical assembly template, also
+  imported from the newsletter plugin. Used by `inject_section.py --new`
+  to scaffold a fresh pre-draft.
 - `formats/infographic-spec.md` — designer-facing infographic brief format.
 - `formats/drawio-diagram.md` — when to use drawio + the flat node spec format
   consumed by `scripts/build_drawio.py`.
@@ -219,11 +318,20 @@ Output `PASS`, or a bulleted `FAIL` list, and fix before saving.
   `render` subcommand.
 - `scripts/build_drawio.py` — zero-dep stdlib: emit a `.drawio` XML file from
   a flat JSON node spec.
-- `scripts/validate.py` — offline checklist for a saved draft. Auto-detects
-  aggregated posts files and validates only the topmost entry's body.
+- `scripts/validate.py` — offline checklist for a saved LinkedIn / Reels
+  draft. Auto-detects aggregated posts files and validates only the topmost
+  entry's body.
+- `scripts/validate_newsletter_section.py` — offline structural check for a
+  newsletter-section draft, keyed by content type (open-source / learning /
+  book). Different rules from `validate.py` (no LinkedIn hook, longer body,
+  type-specific required patterns).
 - `scripts/append_post.py` — insert a new post entry at the top of an
   aggregated `posts/<template>-post.md` file. Handles file creation,
-  slug-conflict detection, and the entry wrapper.
+  slug-conflict detection, and the entry wrapper. Used for `linkedin` /
+  `reels` only — newsletter-section drafts are written directly.
+- `scripts/inject_section.py` — drop a prepared newsletter section into a
+  newsletter pre-draft (`--new` from template, or `--append` into an
+  existing issue file under the matching `## ...` heading).
 
 ## Notes
 

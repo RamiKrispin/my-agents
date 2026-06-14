@@ -1,13 +1,17 @@
 # social-content
 
-Draft a **LinkedIn post** or a **Reels / TikTok script** in your voice — sourced
-from a course-builder run, a workshop-builder run, a newsletter draft, or a
-free-form topic. **Templates are user-curated example posts** under
+Draft a **LinkedIn post**, a **Reels / TikTok script**, or a **newsletter
+section** in your voice — sourced from a course-builder run, a
+workshop-builder run, a newsletter draft, or a free-form topic.
+**Templates are user-curated example posts** under
 `skills/social-content/profiles/default/examples/<template>/`: drop in your
 real posts, the skill learns each template's hook and rhythm from them.
-Drafts aggregate into per-template `posts/<template>-post.md` files in your
-working directory, **newest at the top**, with QA / source-grounding notes
-embedded in a collapsible `<details>` block per entry.
+LinkedIn and Reels drafts aggregate into per-template
+`posts/<template>-post.md` files in your working directory, **newest at the
+top**, with QA / source-grounding notes embedded in a collapsible `<details>`
+block per entry. Newsletter sections write a single self-contained body to
+`posts/<slug>-newsletter.md` and can be dropped straight into a newsletter
+pre-draft.
 
 Install: `/plugin install social-content@my-agents` · Run: `/social-post`
 
@@ -33,12 +37,14 @@ directory:
     contrarian-post.md
     list-post.md
     comparison-post.md
+    <slug>-newsletter.md           # newsletter section, one self-contained body
     assets/                        # sidecar files referenced from posts above
       <slug>.drawio
       <slug>.infographic.md
 ```
 
-Each entry inside a `posts/<template>-post.md` file:
+Each entry inside an aggregated `posts/<template>-post.md` file (LinkedIn /
+Reels):
 
 ```markdown
 ## 2026-06-04 — Stanford CS25: Transformers
@@ -58,6 +64,12 @@ Each entry inside a `posts/<template>-post.md` file:
 New entries are inserted directly below the file's H1 + intro; existing
 entries shift down. If a slug already exists in the file, the helper exits
 with an error so the skill can ask whether to overwrite, skip, or rename.
+
+A `posts/<slug>-newsletter.md` file (newsletter section) is just the literal
+section body — no metadata wrapper, no `## ...` heading (the newsletter
+template supplies the heading on assembly). After QA, the skill can drop it
+into a newsletter pre-draft for you (see **Newsletter section format**
+below).
 
 **Override the default file** with `group: <filename.md>` (e.g.
 `group: 2026-q2-launch.md` writes to `posts/2026-q2-launch.md`).
@@ -85,7 +97,7 @@ template.
 
 ## Sources
 
-The skill ingests source material from one of four places and never invents
+The skill ingests source material from one of five places and never invents
 facts (every concrete claim must trace to the source):
 
 - **`course`** — a built course-builder output dir (chapter / lesson scripts,
@@ -97,6 +109,9 @@ facts (every concrete claim must trace to the source):
 - **`topic`** — free-form: you provide a topic line + 3-7 bullets (and the
   skill verifies any named library / project via WebFetch). See
   `from-topic.md`.
+- **`url`** — a public link (YouTube, podcast, article, docs page). The
+  skill researches it (WebFetch, falling back to the JS-rendering reader
+  for fetch-hostile pages) before drafting. See `from-url.md`.
 
 ## Voice (the source of truth)
 
@@ -127,6 +142,43 @@ Three layers, read in order on every run:
 
 Both are **on request only** — defaults skip them.
 
+## Newsletter section format
+
+Pass `format: newsletter-section` to draft a body shaped to drop straight
+into a `newsletter-builder` issue. The skill picks a sub-shape from the
+content type:
+
+- `open-source` — `github.com`, `gitlab.com`, package registries.
+- `book` — O'Reilly / Manning / Packt / Amazon `/dp/...` / Google Books /
+  ISBN-bearing URLs.
+- `learning` — anything else (courses, talks, tutorials, docs).
+
+Override with `newsletter-type: open-source | learning | book` if the
+heuristic gets it wrong.
+
+The shape itself is **owned by the `newsletter` plugin** — its
+`skills/newsletter-builder/sections/{open-source,learning,book}.md` files
+are imported into this skill at build time (see `imports:` in
+`plugin.yaml`). One source of truth; both plugins stay in sync as the
+section spec evolves.
+
+After QA passes the section is written to `posts/<slug>-newsletter.md`. The
+skill then asks whether to also inject it into a newsletter pre-draft
+(`<newsletter-out>/issue-YYYY-MM-DD.md`):
+
+- **skip** — only the local section file is written.
+- **new** — `scripts/inject_section.py --new ...` creates a fresh pre-draft
+  from the imported newsletter template, fills the matching slot, and leaves
+  the other two slots as TODO placeholders. Run the `newsletter` plugin on
+  that pre-draft later to fill them in.
+- **<existing-issue.md>** — `scripts/inject_section.py --append ...` drops
+  the section into the matching `## ...` heading. Anything already in that
+  section is preserved with a horizontal-rule separator between old and new
+  content.
+
+Bypass the prompt by passing `newsletter-draft: skip | new | <path>` up
+front.
+
 ## Workflow
 
 1. **Parse** the request (source / format / template / add-ons / slug / group).
@@ -152,15 +204,27 @@ Both are **on request only** — defaults skip them.
 
 All under `skills/social-content/scripts/`.
 
-- `validate.py <file>` — offline structural check. Auto-detects aggregated
-  posts files (H2 date headings) and validates **only the topmost entry's
-  body**; single-post files validate as-is. Word-boundary banned-phrase
-  match (`next-gen` flagged, `next-generation` not). Bullet-list paragraphs
-  exempt from the line-cap.
+- `validate.py <file>` — offline structural check for LinkedIn / Reels.
+  Auto-detects aggregated posts files (H2 date headings) and validates
+  **only the topmost entry's body**; single-post files validate as-is.
+  Word-boundary banned-phrase match (`next-gen` flagged, `next-generation`
+  not). Bullet-list paragraphs exempt from the line-cap.
+- `validate_newsletter_section.py <type> <file>` — offline structural check
+  for a newsletter-section draft. `<type>` = `open-source | learning |
+  book`. Different rules from `validate.py`: no LinkedIn-style hook check,
+  longer body bounds, type-specific required patterns (open-source needs
+  `Project repo:` + `License:` lines; book needs `*Title* by Author` +
+  `Topics Covered`; learning needs at least one `### Resource` heading +
+  bare URL).
 - `append_post.py <posts-file> <meta.json> <body.md>` — inserts a new entry
-  at the top. Creates the file with a default header on first run; detects
-  slug conflicts; embeds optional `meta.notes` in a collapsible `<details>`
-  block.
+  at the top of a LinkedIn / Reels aggregated file. Creates the file with a
+  default header on first run; detects slug conflicts; embeds optional
+  `meta.notes` in a collapsible `<details>` block.
+- `inject_section.py --new|--append <draft-path> --type <type> <section-file>` —
+  drops a prepared newsletter section into a newsletter pre-draft. `--new`
+  scaffolds from the imported newsletter template with TODO placeholders
+  for the unfilled slots; `--append` writes into an existing issue file
+  under the matching heading.
 - `build_drawio.py <spec.json> <out.drawio>` — emits a `.drawio` XML file
   from a flat JSON node spec (nodes, edges, optional shapes / styles /
   layout = horizontal | vertical | grid).
@@ -190,7 +254,9 @@ This plugin follows the marketplace conventions: edit under `source/`, run
 - `skills/social-content/SKILL.md` — full skill instructions.
 - `skills/social-content/profiles/default/examples/<template>/README.md` —
   per-template shape documentation.
-- `skills/social-content/formats/{linkedin-post,reels-script,infographic-spec,drawio-diagram}.md` —
-  format-specific scaffolds.
+- `skills/social-content/formats/{linkedin-post,reels-script,newsletter-section,infographic-spec,drawio-diagram}.md` —
+  format-specific scaffolds. The `newsletter-section` scaffold delegates to
+  three type-specific specs (`formats/newsletter-sections/{open-source,learning,book}.md`)
+  imported from the `newsletter` plugin.
 - `skills/social-content/sources/from-{course,workshop,newsletter,topic}.md` —
   source-specific ingestion guides.

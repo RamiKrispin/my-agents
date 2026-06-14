@@ -104,12 +104,47 @@ If a plugin folder contains `hooks/` or a `.mcp.json`, they are copied verbatim
 into the generated Claude Code plugin. These have no opencode equivalent here
 and are not converted.
 
-## 7. Regenerate, sync docs, and commit
+## 7. (Optional) Cross-plugin shared assets — `imports:`
+
+When two plugins need to share a file or directory (a format spec, a
+template, a style guide), keep one canonical copy and have the other import
+it at build time. Add an `imports:` field to the importing plugin's
+`plugin.yaml`:
+
+```yaml
+imports: [<src> > <dst>, <src2> > <dst2>]
+```
+
+Each entry has the form `<src-relative-to-source/plugins> > <dst-relative-to-built-plugin>`.
+The build copies the source file (or directory tree) into the built plugin's
+output. Source files are *not* duplicated in the importing plugin's
+`source/` tree — they live with their canonical owner only.
+
+Example: `social-content` imports the newsletter section format spec and the
+newsletter assembly template from the `newsletter` plugin:
+
+```yaml
+imports: [newsletter/skills/newsletter-builder/sections > skills/social-content/formats/newsletter-sections, newsletter/skills/newsletter-builder/templates/newsletter-template.md > skills/social-content/formats/newsletter-template.md]
+```
+
+Notes:
+
+- The build fails if a `<src>` path doesn't exist — typo-safe.
+- Imports are Claude-Code-only (no opencode equivalent — opencode plugins
+  don't ship skills).
+- Bump the importing plugin's `version` whenever the imported source
+  changes; otherwise installs of the importing plugin won't pick up the
+  refresh.
+
+## 8. Regenerate, sync docs, and commit
 
 After any change to a plugin:
 
 1. **Bump the plugin `version`** in its `plugin.yaml` (even for small edits).
-   Claude Code only re-installs a plugin when the version changes.
+   Claude Code only re-installs a plugin when the version changes. If you
+   edited a file that another plugin `imports:` from, bump the **importing**
+   plugin's version too — otherwise installs of that plugin won't pick up
+   the refresh.
 2. **Regenerate** the tool outputs:
    ```bash
    python3 scripts/build.py

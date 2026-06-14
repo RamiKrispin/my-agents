@@ -1,18 +1,9 @@
 # Voice Guide — Social
 
-The voice for **short-form** content: LinkedIn posts, X threads, Bluesky,
-Threads, Instagram captions, and Reels / TikTok scripts. Re-read this every
+The voice for LinkedIn posts and short-form video scripts. Re-read this every
 run, plus the chosen template's example folder. The example posts under
 `examples/<template>/` are the source of truth for shape and rhythm; this guide
 is the source of truth for tone.
-
-> **Long-form (blog) drafts use a different voice.** Substack / Medium posts
-> use complete sentences (not fragments), forward-frame closers (not
-> "Skip this step and …"), no body emojis, no styled callouts, and a fixed
-> 2-course CTA template. See [`../../formats/blog-post.md`](../../formats/blog-post.md)
-> for the full long-form spec, and re-read every `*.md` exemplar in
-> `examples/blog/` before drafting a blog post. **Don't carry the social
-> staccato rhythm into long-form.**
 
 ## Audience
 

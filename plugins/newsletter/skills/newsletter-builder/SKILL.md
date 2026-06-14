@@ -15,12 +15,23 @@ and ask.
 Links grouped into three sections (a short note per link is welcome — use it):
 
 ```
-open-source: <github or project url>   # one or more
-learning:    <course / tutorial / video / docs url>   # one or more
-book:        <book url>                 # one
+open-source: <github or project url> | <path-to-prepared-section.md>   # one or more
+learning:    <course / tutorial / video / docs url> | <path-to-prepared-section.md>   # one or more
+book:        <book url> | <path-to-prepared-section.md>                # one
 issue:       <issue number>             # optional; for the "| Issue N" title
 promo:       <optional course/promo link to feature after the intro>
 ```
+
+Each value is **either** a URL (researched in step 2) **or** a local path to
+a prepared section Markdown file (typically produced by the `social-content`
+plugin's `format: newsletter-section` mode). A value is treated as a path if
+it ends with `.md` and resolves to an existing local file. When a path is
+given, step 2 (Research) and step 3 (Draft) are skipped for that slot — the
+file's content is inlined verbatim under the matching heading. The voice
+pass (step 4) and structural validate (step 6) still run over the assembled
+draft.
+
+Mixing is fine: e.g. an `open-source:` path together with `learning:` URLs.
 
 If sections or links are missing, ask once, concisely. Don't proceed on guesses.
 If the issue number is missing, ask for it (or infer the next number from the
@@ -66,9 +77,16 @@ drafting:
 Run these in order. Load the voice **before** drafting (step 4 reads `style/`),
 so sections are written in voice from the first draft, not just polished at the end.
 
-1. **Parse** — sort the provided links into the three sections; attach any note.
+1. **Parse** — sort the provided values into the three sections; attach any
+   note. For each value, classify it as one of:
+   - **URL** — research and draft in step 2 / 3 below.
+   - **Prepared section file** — the value ends with `.md` and resolves to
+     an existing local file. Read it now into memory; **skip** research +
+     draft for that slot. The file's content goes verbatim into the
+     matching template slot at step 5.
 
-2. **Research each link** — gather facts; never invent them.
+2. **Research each link** — gather facts; never invent them. **Skip slots
+   marked as prepared section files in step 1.**
    - **GitHub repos**: run `python3 scripts/research.py github <url>` for metadata
      (stars, language, license, topics, description, default branch, README raw
      URL). Then read the README via WebFetch on the `readme_raw` URL it prints
@@ -94,9 +112,18 @@ so sections are written in voice from the first draft, not just polished at the 
    - `sections/learning.md` (intentionally shorter)
    - `sections/book.md` (medium)
 
+   **Skip drafting for slots marked as prepared section files in step 1** —
+   they're already in the right shape. Just hold their content for assembly
+   in step 5.
+
 4. **Voice pass** — read `style/voice-guide.md` and the issues in
    `style/examples/`, then revise every section to match that voice. Apply the
    guide's "Avoid" list (no hype adjectives, no marketing language).
+
+   Prepared section files were drafted against the same `sections/*.md`
+   spec, but apply lighter editing — fix any voice drift you spot, but
+   don't rewrite content the social-content skill already grounded in
+   citations.
 
 5. **Assemble** — use `templates/newsletter-template.md`: intro, the three
    sections in the **fixed order** (Open Source → Learning → Book), sign-off,

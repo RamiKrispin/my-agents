@@ -2,11 +2,16 @@
 # Per docs/adding-a-plugin.md. Bump version on every change; run scripts/build.py.
 
 name: social-content
-description: Draft LinkedIn posts and short-form video (Reels / TikTok) scripts in your voice, sourced from a course-builder run, a workshop-builder run, a newsletter issue, or a free-form topic. Aggregates drafts into per-template posts/<template>-post.md files in the working directory (newest at top). Optional infographic spec or drawio diagram on request.
-version: 0.2.4
+description: Draft LinkedIn posts, Reels / TikTok scripts, or newsletter sections in your voice, sourced from a course-builder run, a workshop-builder run, a newsletter issue, or a free-form topic. Aggregates LinkedIn / Reels drafts into per-template posts/<template>-post.md files (newest at top); newsletter sections write to posts/<slug>-newsletter.md and can be injected directly into a newsletter pre-draft. Optional infographic spec or drawio diagram on request.
+version: 0.3.0
 author_name: Rami Krispin
 author_url: https://github.com/RamiKrispin
 homepage: https://github.com/RamiKrispin/my-agents
 license: MIT
 category: content
-keywords: [social, linkedin, reels, tiktok, content, infographic, drawio]
+keywords: [social, linkedin, reels, tiktok, newsletter, content, infographic, drawio]
+# Cross-plugin shared assets. The newsletter section format spec and the
+# assembly template are owned by the `newsletter` plugin; copied in here at
+# build time so social-content can produce drafts that match exactly.
+imports: [newsletter/skills/newsletter-builder/sections > skills/social-content/formats/newsletter-sections, newsletter/skills/newsletter-builder/templates/newsletter-template.md > skills/social-content/formats/newsletter-template.md]
+

@@ -1,7 +1,7 @@
 {
   "name": "newsletter",
-  "version": "0.1.5",
-  "description": "Draft Rami Krispin's weekly data science newsletter from a set of links, in his voice.",
+  "version": "0.2.0",
+  "description": "Draft Rami Krispin's weekly data science newsletter from a set of links \u2014 or prepared section files from the social-content plugin \u2014 in his voice.",
   "author": {
     "name": "Rami Krispin",
     "url": "https://github.com/RamiKrispin"
